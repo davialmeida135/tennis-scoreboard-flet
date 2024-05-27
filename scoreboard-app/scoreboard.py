@@ -1,0 +1,456 @@
+from typing import Any
+import flet as ft
+from flet import (
+    Column,
+    Container,
+    ElevatedButton,
+    Page,
+    Row,
+    Text,
+    UserControl,
+    border_radius,
+    colors,
+    TextField
+    )
+from tennismatch import TennisMatch
+"""class SetsRow(ft.Row):
+    def __init__(self, sets):
+        self.controls=[
+
+        ]"""
+
+
+class Scoreboard(UserControl):
+    def __init__(self, match: TennisMatch):
+        super().__init__()
+        self.match = match
+        self.placar_1 = Row(
+            spacing=0,
+        )
+        self.placar_2 = Row(
+            spacing=0,
+        )
+
+    def update_placar_1(self):
+        self.placar_1.controls.clear()
+        #Nome do jogador
+        self.placar_1.controls.append(
+            ft.Container(
+                content=ft.Text(value=self.match.player1, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                alignment=ft.alignment.center,
+                
+                padding=5,
+                height=50,
+                width=90,
+                gradient=ft.RadialGradient(
+                    center=ft.alignment.bottom_right,
+                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    radius=1,
+                ),
+                #border_radius=ft.border_radius.all(5),
+            ),
+        )
+
+        #Sets finalizados
+        for set in self.match.match_moment.sets:
+            self.placar_1.controls.append(
+                ft.Container(
+                    content=ft.Text(value=set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    alignment=ft.alignment.center,
+                    padding=5,
+                    height=50,
+                    width=30,
+                    gradient=ft.LinearGradient(
+                        begin=ft.alignment.top_center,
+                        end=ft.alignment.bottom_center,
+                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        
+                    ),
+                    #border_radius=ft.border_radius.all(5),
+                )
+            )
+        #Set em andamento
+        self.placar_1.controls.append(
+            ft.Container(
+                        content=ft.Text(value=self.match.match_moment.current_set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                        alignment=ft.alignment.center,
+                        padding=10,
+                        height=50,
+                        width=31,
+                        gradient=ft.LinearGradient(
+                            begin=ft.alignment.top_center,
+                            end=ft.alignment.bottom_center,
+                            colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                            
+                        ),
+                        border_radius=ft.border_radius.all(5),
+                    )
+        )
+
+        #Game em andamento
+        self.placar_1.controls.append(
+            ft.Container(
+                content=ft.Text(
+                    value=self.match.match_moment.current_game.player1_score,
+                    color=colors.GREY_800,
+                    weight=ft.FontWeight.BOLD,
+                    width=100,
+                    max_lines=2,
+                    text_align=ft.TextAlign.CENTER,
+                    ),
+                alignment=ft.alignment.center,
+                width=51.6,
+                height=50,
+                #bgcolor=ft.colors.WHITE,
+                border_radius=ft.border_radius.all(5),
+                gradient=ft.LinearGradient(
+                    begin=ft.alignment.top_center,
+                    end=ft.alignment.bottom_center,
+                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                ),
+            )
+        )
+
+    def update_placar_2(self):
+        self.placar_2.controls.clear()
+        #Nome do jogador
+        self.placar_2.controls.append(
+            ft.Container(
+                content=ft.Text(value=self.match.player2, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                alignment=ft.alignment.center,
+                
+                padding=5,
+                height=50,
+                width=90,
+                gradient=ft.RadialGradient(
+                    center=ft.alignment.bottom_right,
+                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    radius=1,
+                ),
+                #border_radius=ft.border_radius.all(5),
+            ),
+        )
+
+        #Sets finalizados
+        for set in self.match.match_moment.sets:
+            self.placar_2.controls.append(
+                ft.Container(
+                    content=ft.Text(value=set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    alignment=ft.alignment.center,
+                    padding=5,
+                    height=50,
+                    width=30,
+                    gradient=ft.LinearGradient(
+                        begin=ft.alignment.top_center,
+                        end=ft.alignment.bottom_center,
+                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        
+                    ),
+                    #border_radius=ft.border_radius.all(5),
+                )
+            )
+
+        #Set em andamento
+        self.placar_2.controls.append(
+            ft.Container(
+                content=ft.Text(value=self.match.match_moment.current_set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                alignment=ft.alignment.center,
+                padding=10,
+                height=50,
+                width=31,
+                gradient=ft.LinearGradient(
+                    begin=ft.alignment.top_center,
+                    end=ft.alignment.bottom_center,
+                    colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                    
+                ),
+                border_radius=ft.border_radius.all(5),
+            )
+        )
+
+        #Game em andamento
+        self.placar_2.controls.append(
+            ft.Container(
+                content=ft.Text(
+                    value=self.match.match_moment.current_game.player2_score,
+                    color=colors.GREY_800,
+                    weight=ft.FontWeight.BOLD,
+                    width=100,
+                    max_lines=2,
+                    text_align=ft.TextAlign.CENTER,
+                    ),
+                alignment=ft.alignment.center,
+                width=51.6,
+                height=50,
+                #bgcolor=ft.colors.WHITE,
+                border_radius=ft.border_radius.all(5),
+                gradient=ft.LinearGradient(
+                    begin=ft.alignment.top_center,
+                    end=ft.alignment.bottom_center,
+                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                ),
+            )
+        )
+
+
+    def build(self):
+        
+    ## Criacao do placar
+        self.update_placar_1()
+        self.update_placar_2()
+
+
+    ## Texto dos botões grandes de pontuação
+        self.botao_1 = ft.Text(value=self.match.match_moment.current_game.player1_score, size=50, color=colors.WHITE)
+        self.botao_2 = ft.Text(value=self.match.match_moment.current_game.player2_score, size=50, color=colors.WHITE)       
+        
+       
+        return Container(
+            #bgcolor=colors.BLACK,
+            border_radius=border_radius.all(5),
+            padding=2,
+            expand=True,
+            content=Column(
+            controls=[
+                Row(
+                controls=[
+                    # Laranja
+                    Container(
+                        width=300,
+                        height=450,
+                        bgcolor=ft.colors.DEEP_ORANGE_500,
+                        border_radius=border_radius.all(5),
+                        padding=4,
+                        content=Column(
+                            controls=[
+#======================================== NOMES JOGADORES ===================================
+                                Row(
+                                    controls=[
+                                        Container(
+                                            width=150,
+                                            height=60,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                            ),
+                                            border_radius=border_radius.all(5),
+                                            content=Row(
+                                                controls=[
+                                                    Text(
+                                                        value=self.match.player1,
+                                                        color=colors.WHITE,
+                                                        weight=ft.FontWeight.BOLD,
+                                                        size=15,
+                                                        width=140,
+                                                        max_lines=2,
+                                                        text_align=ft.TextAlign.CENTER),
+                                                ],
+                                                alignment=ft.MainAxisAlignment.CENTER,
+                                            ),
+                                            expand=True, 
+                                        ),
+                                        Container(
+                                            width=150,
+                                            height=60,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                            ),
+                                            border_radius=border_radius.all(5),
+                                            content=Row(
+                                                controls=[
+                                                    Text(
+                                                        value=self.match.player2,
+                                                        color=colors.WHITE,
+                                                        weight=ft.FontWeight.BOLD,
+                                                        size=15,
+                                                        width=140,
+                                                        max_lines=2,
+                                                        text_align=ft.TextAlign.CENTER),
+                                                ],
+                                                alignment=ft.MainAxisAlignment.CENTER,
+                                            ),
+                                            expand=True,
+                                        )
+                                    ]
+                                ),
+#==================================== BOTÕES DE PONTUAÇÃO ===================================
+                                Row(
+                                    controls=[
+                                        Container(
+                                            expand=1,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                            ),
+                                            border_radius=border_radius.all(10),
+                                            content=ft.FilledButton(
+                                            #width=142,
+                                            height=142,
+                                            on_click = self.point_player1,
+                                            
+                                            style=ft.ButtonStyle(
+                                                shape=ft.RoundedRectangleBorder(radius=10),
+                                                bgcolor=ft.colors.BLACK12,
+                                                
+                                            ),
+                                            content=ft.Container(
+                                            # bgcolor=ft.colors.GREEN_ACCENT_400,
+                                                
+                                                content=ft.Column(controls=
+                                                    [
+                                                        self.botao_1,
+                                                    ],
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                )
+                                                
+                                            ),
+                                            expand=True,
+                                        )),
+                                        Container(
+                                            expand=1,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                            ),
+                                            border_radius=border_radius.all(10),
+                                            content=ft.FilledButton(
+                                                #width=142,
+                                                height=142,
+                                                on_click = self.point_player2,
+                                                
+                                                style=ft.ButtonStyle(
+                                                    shape=ft.RoundedRectangleBorder(radius=10),
+                                                    bgcolor=ft.colors.BLACK12,
+                                                                                                  ),
+                                                content=ft.Container(
+                                                    content=ft.Column(controls=
+                                                    [
+                                                        self.botao_2,
+                                                    ],
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                )                                            
+                                                ),
+                                                expand=True,
+                                            ))
+                                    ]
+                                ),
+#==================================== UNDO // REDO ===================================
+                                Row(
+                                    controls=[
+                                        Container(
+                                            expand=1,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                            ),
+                                            border_radius=border_radius.all(10),
+                                            content=ft.FilledButton(
+                                                
+                                                on_click = self.undo_pressed,
+                                                style=ft.ButtonStyle(
+                                                    shape=ft.RoundedRectangleBorder(radius=10),
+                                                    bgcolor=ft.colors.BLACK12,
+                                                ),
+                                                content=ft.Container(
+                                                # bgcolor=ft.colors.GREEN_ACCENT_400,
+                                                    
+                                                    content=ft.Row(
+                                                        controls=[ 
+                                                        
+                                                        ft.Icon(name=ft.icons.UNDO_ROUNDED, color=ft.colors.WHITE,size=30),
+                                                        ],
+                                                        alignment=ft.MainAxisAlignment.CENTER,
+                                                    ),
+                                                    
+                                                ),
+                                                expand=True,
+                                            )
+                                        ),
+                                        ft.FilledButton(
+                                            
+                                            on_click = self.redo_pressed,
+                                            style=ft.ButtonStyle(
+                                                shape=ft.RoundedRectangleBorder(radius=10),
+                                                bgcolor=ft.colors.GREEN_800,
+                                            ),
+                                            content=ft.Container(
+                                            
+                                                
+                                                content=ft.Row(
+                                                    controls=[ 
+                                                    
+                                                    ft.Icon(name=ft.icons.REDO_ROUNDED, color=ft.colors.WHITE,size=30),
+                                                    ],
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                ),
+                                                
+                                            ),
+                                            expand=True,
+                                        )
+                                    ]
+                                ),
+#================================== PLACAR =======================================                              
+                                Row(
+                                    controls=[
+                                        Container(
+                                            expand=1,
+                                            bgcolor=colors.GREEN_800,
+                                            border_radius=border_radius.all(5),
+                                            #height=100,
+                                            content = Column(
+                                                spacing =0,
+                                                controls = [
+                                                    self.placar_1,
+                                                    self.placar_2,
+                                                ],
+                                            ),
+                                        )
+                                    ]
+                                ),
+                            ],
+                        )
+                    ),
+                ]
+                ),
+            ]
+            ),
+        )
+    
+    def update_all(self):
+        self.botao_1.value = self.match.match_moment.current_game.player1_score  
+        self.botao_2.value = self.match.match_moment.current_game.player2_score 
+        self.update_placar_1()
+        self.update_placar_2()    
+        self.update()
+
+    def point_player1(self, button):
+        self.match.point(self.match.player1)
+        #self.match.relatorio()
+        #self.p1_score_textfield.value = str(self.match.match_moment.current_game.player1_score)
+        #self.p2_score_textfield.value = str(self.match.match_moment.current_game.player2_score)
+
+        self.update_all()
+      
+    def point_player2(self, button):
+        self.match.point(self.match.player2)
+        #self.match.relatorio()
+        #self.p1_score_textfield.value = str(self.match.match_moment.current_game.player1_score)
+        #self.p2_score_textfield.value = str(self.match.match_moment.current_game.player2_score)
+
+        self.update_all()
+
+    def undo_pressed(self, button):
+        #print("Undo")
+        self.match.undo()
+        self.update_all()
+   
+    def redo_pressed(self, button):
+        #print("redo")
+        self.match.redo()
+        self.update_all()
