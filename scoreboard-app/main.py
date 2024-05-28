@@ -11,6 +11,8 @@ def main(page: ft.Page):
     board = Scoreboard(match)
 
     page.add(board)
-
-
+    
 ft.app(main)
+
+
+

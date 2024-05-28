@@ -205,37 +205,48 @@ class Scoreboard(UserControl):
         self.botao_2 = ft.Text(value=self.match.match_moment.current_game.player2_score, size=50, color=colors.WHITE)       
         
        
-        return Container(
-            #bgcolor=colors.BLACK,
-            border_radius=border_radius.all(5),
-            padding=2,
-            expand=True,
-            content=Column(
-            controls=[
-                Row(
-                controls=[
-                    # Laranja
-                    Container(
-                        width=300,
-                        height=450,
+        return ft.SafeArea(
+ 
+            content= 
+            Container(
+                        #width=300,
+                        #height=450,
                         bgcolor=ft.colors.DEEP_ORANGE_500,
-                        border_radius=border_radius.all(5),
-                        padding=4,
+                        #border_radius=border_radius.all(5),
+                        #padding=4,
                         content=Column(
+                            spacing=40,
                             controls=[
+                                Row(
+                                    alignment = ft.MainAxisAlignment.CENTER,
+                                    controls = [
+                                        ft.Icon(name=ft.icons.SPORTS_BASEBALL_ROUNDED, color=ft.colors.YELLOW),
+                                        ft.Text("Tennis Scoreboard",
+                                            size=20,
+                                            color=ft.colors.WHITE,
+                                            #bgcolor=ft.colors.GREEN_700,
+                                            weight=ft.FontWeight.BOLD,
+                                            #italic=True,
+                                            ),
+                                        ft.Icon(name=ft.icons.SPORTS_BASEBALL_ROUNDED, color=ft.colors.YELLOW)
+                                        ]
+                                ),
+                                
 #======================================== NOMES JOGADORES ===================================
                                 Row(
                                     controls=[
                                         Container(
                                             width=150,
                                             height=60,
+                                            expand=True,
+                                            border_radius=border_radius.all(5),
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
                                                 colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
-                                            ),
-                                            border_radius=border_radius.all(5),
+                                            ),  
                                             content=Row(
+                                                alignment=ft.MainAxisAlignment.CENTER,
                                                 controls=[
                                                     Text(
                                                         value=self.match.player1,
@@ -246,9 +257,9 @@ class Scoreboard(UserControl):
                                                         max_lines=2,
                                                         text_align=ft.TextAlign.CENTER),
                                                 ],
-                                                alignment=ft.MainAxisAlignment.CENTER,
+                                                
                                             ),
-                                            expand=True, 
+                                             
                                         ),
                                         Container(
                                             width=150,
@@ -355,7 +366,7 @@ class Scoreboard(UserControl):
                                                 on_click = self.undo_pressed,
                                                 style=ft.ButtonStyle(
                                                     shape=ft.RoundedRectangleBorder(radius=10),
-                                                    bgcolor=ft.colors.BLACK12,
+                                                    bgcolor=ft.colors.with_opacity(0, '#ff6666'),
                                                 ),
                                                 content=ft.Container(
                                                 # bgcolor=ft.colors.GREEN_ACCENT_400,
@@ -372,26 +383,35 @@ class Scoreboard(UserControl):
                                                 expand=True,
                                             )
                                         ),
-                                        ft.FilledButton(
-                                            
-                                            on_click = self.redo_pressed,
-                                            style=ft.ButtonStyle(
-                                                shape=ft.RoundedRectangleBorder(radius=10),
-                                                bgcolor=ft.colors.GREEN_800,
+                                        Container(
+                                            expand=1,
+                                            gradient=ft.LinearGradient(
+                                                begin=ft.alignment.top_center,
+                                                end=ft.alignment.bottom_center,
+                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
                                             ),
-                                            content=ft.Container(
-                                            
+                                            border_radius=border_radius.all(10),
+                                            content=ft.FilledButton(
                                                 
-                                                content=ft.Row(
-                                                    controls=[ 
-                                                    
-                                                    ft.Icon(name=ft.icons.REDO_ROUNDED, color=ft.colors.WHITE,size=30),
-                                                    ],
-                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                on_click = self.redo_pressed,
+                                                style=ft.ButtonStyle(
+                                                    shape=ft.RoundedRectangleBorder(radius=10),
+                                                    bgcolor=ft.colors.with_opacity(0, '#ff6666'),
                                                 ),
-                                                
-                                            ),
-                                            expand=True,
+                                                content=ft.Container(
+                                                # bgcolor=ft.colors.GREEN_ACCENT_400,
+                                                    
+                                                    content=ft.Row(
+                                                        controls=[ 
+                                                        
+                                                        ft.Icon(name=ft.icons.REDO_ROUNDED, color=ft.colors.WHITE,size=30),
+                                                        ],
+                                                        alignment=ft.MainAxisAlignment.CENTER,
+                                                    ),
+                                                    
+                                                ),
+                                                expand=True,
+                                            )
                                         )
                                     ]
                                 ),
@@ -413,14 +433,14 @@ class Scoreboard(UserControl):
                                         )
                                     ]
                                 ),
+#================================
+                                
                             ],
-                        )
+                        ),
                     ),
-                ]
-                ),
-            ]
-            ),
-        )
+            )
+        
+                
     
     def update_all(self):
         self.botao_1.value = self.match.match_moment.current_game.player1_score  
