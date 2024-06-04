@@ -13,12 +13,6 @@ from flet import (
     TextField
     )
 from tennismatch import TennisMatch
-"""class SetsRow(ft.Row):
-    def __init__(self, sets):
-        self.controls=[
-
-        ]"""
-
 
 class Scoreboard(UserControl):
     def __init__(self, match: TennisMatch):
@@ -213,13 +207,14 @@ class Scoreboard(UserControl):
                         #height=450,
                         bgcolor=ft.colors.DEEP_ORANGE_500,
                         #border_radius=border_radius.all(5),
-                        #padding=4,
+                        padding=4,
                         content=Column(
-                            spacing=40,
+                            spacing=50,
                             controls=[
                                 Row(
                                     alignment = ft.MainAxisAlignment.CENTER,
                                     controls = [
+                                        
                                         ft.Icon(name=ft.icons.SPORTS_BASEBALL_ROUNDED, color=ft.colors.YELLOW),
                                         ft.Text("Tennis Scoreboard",
                                             size=20,

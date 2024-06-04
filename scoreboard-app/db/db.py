@@ -2,6 +2,10 @@ import sqlite3
 import os
 from db import db_path
 
+def connect(db_path):
+    conn = sqlite3.connect(db_path)
+    return conn
+
 def table_exists(conn, table_name):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", {table_name})
