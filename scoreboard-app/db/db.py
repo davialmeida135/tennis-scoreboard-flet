@@ -1,10 +1,12 @@
 import sqlite3
 import os
-from db import db_path
+from pathlib import Path
 
-def connect(db_path):
-    conn = sqlite3.connect(db_path)
-    return conn
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+db_name = "db.db"
+
+db_path = os.path.join(BASE_DIR, db_name)
 
 def table_exists(conn, table_name):
     cursor = conn.cursor()
@@ -14,7 +16,7 @@ def table_exists(conn, table_name):
 def create_database():
     conn = sqlite3.connect(db_path)
 
-    if not os.path.exists(db_path):
+    if os.path.exists(db_path):
         cursor = conn.cursor()
 
         cursor.execute(
@@ -24,15 +26,21 @@ def create_database():
                 username TEXT NOT NULL,
                 password TEXT NOT NULL
             );
-            
-            CREATE TABLE match (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                owner_id INTEGER ,
-                match_info TEXT NOT NULL,
-                FOREIGN KEY (
-                owner_id
-                )
-                REFERENCES user (id) ON DELETE CASCADE
-            );
             """
         )
+
+        cursor.execute(
+                """
+                CREATE TABLE match (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    owner_id INTEGER ,
+                    match_info TEXT NOT NULL,
+                    FOREIGN KEY (
+                    owner_id
+                )
+                    REFERENCES user (id) ON DELETE CASCADE
+                );
+                """
+            )
+
+create_database()
