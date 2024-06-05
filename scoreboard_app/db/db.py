@@ -8,6 +8,9 @@ db_name = "db.db"
 
 db_path = os.path.join(BASE_DIR, db_name)
 
+def connect():
+    return sqlite3.connect(db_path)
+
 def table_exists(conn, table_name):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", {table_name})
@@ -23,24 +26,23 @@ def create_database():
             """
             CREATE TABLE user (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL,
+                username TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL
             );
             """
         )
 
         cursor.execute(
-                """
-                CREATE TABLE match (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    owner_id INTEGER ,
-                    match_info TEXT NOT NULL,
-                    FOREIGN KEY (
-                    owner_id
-                )
-                    REFERENCES user (id) ON DELETE CASCADE
-                );
-                """
+            """
+            CREATE TABLE match (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                owner_id INTEGER ,
+                match_info TEXT NOT NULL,
+                FOREIGN KEY (
+                owner_id
+            )
+                REFERENCES user (id) ON DELETE CASCADE
+            );
+            """
             )
 
-create_database()

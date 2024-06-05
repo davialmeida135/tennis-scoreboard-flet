@@ -1,10 +1,13 @@
 import copy
 from datetime import datetime
 import json
+import sys,os
+
 
 class TennisMatch:
-    def __init__(self, player1 : str, player2 : str, max_sets=3):
-        
+    def __init__(self, player1 : str, player2 : str, match_id, max_sets=3):
+
+        self.match_id = match_id
         self.player1 = player1
         self.player2 = player2
         self.match_moment = MatchMoment()
@@ -15,6 +18,7 @@ class TennisMatch:
 
     def to_dict(self):
         return {
+            'match_id': self.match_id,
             'title': self.title,
             'player1': self.player1,
             'player2': self.player2,
@@ -28,7 +32,7 @@ class TennisMatch:
     
     @classmethod
     def from_dict(cls, data):
-        match = cls(data['player1'], data['player2'], data['owner_id'])
+        match = cls(data['player1'], data['player2'], data['match_id'])
         match.match_moment = MatchMoment.from_dict(data['match_moment'])  # assuming MatchMoment has a from_dict method
         match.history_undo = [MatchMoment.from_dict(moment) for moment in data['history_undo']]  # assuming MatchMoment has a from_dict method
         match.history_redo = [MatchMoment.from_dict(moment) for moment in data['history_redo']]  # assuming MatchMoment has a from_dict method
@@ -51,16 +55,14 @@ class TennisMatch:
     def point(self, player):
         self.history_undo.append(copy.deepcopy(self.match_moment))
         self.history_redo = []
-        if type(self.match_moment.current_game) == Tiebreak:
-            print('é tie')
+        if type(self.match_moment.current_game) == Tiebreak:            
             self.update_tiebreak(player)
         
-        elif type(self.match_moment.current_game) == Game:
-            print('game normal')
+        elif type(self.match_moment.current_game) == Game:            
             self.update_game(player)
-        else:
-            print('fodase')
+        else:           
             return
+        
 
 
     def update_game(self, player):
@@ -188,6 +190,7 @@ class TennisMatch:
         return
 
     def relatorio(self):
+        print("Match id: ", self.match_id)
         print("Player 1: ", self.player1)
         print("Player 2: ", self.player2)
 
@@ -293,7 +296,8 @@ class Tiebreak:
         game.player1_score = int(data['player1_score'])
         game.player2_score = int(data['player2_score'])
         return game
-'''  
+    
+'''
 p = TennisMatch('Davi','Gustavo',13)
 p.start_match()
 
@@ -314,4 +318,5 @@ print("==========================================")
 q = TennisMatch.from_json(p.to_json())
 q.relatorio()
 q.point('Davi')
-q.relatorio()''' 
+q.relatorio()
+''' 

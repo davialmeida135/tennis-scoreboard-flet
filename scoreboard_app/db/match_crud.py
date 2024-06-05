@@ -3,12 +3,13 @@ def get_data(conn, conditions=None):
     if conditions:
         cursor.execute(f"SELECT * FROM match WHERE {conditions}")
     else:
-        cursor.execute(f"SELECT * FROM user")
+        cursor.execute(f"SELECT * FROM match")
 
     rows = cursor.fetchall()
     columns = [col[0] for col in cursor.description]
 
-    result = [{columns[i]:row[i]} for i in range(len(columns)) for row in rows]
+    result = [{columns[i]:row[i] for i in range(len(columns))} for row in rows]
+    return result
 
 def check_data_exists(conn,condition):
     cursor = conn.cursor()

@@ -1,5 +1,6 @@
 from typing import Any
 import flet as ft
+import sys,os
 from flet import (
     Column,
     Container,
@@ -12,12 +13,16 @@ from flet import (
     colors,
     TextField
     )
-from tennismatch import TennisMatch
+
+from views.tennismatch import TennisMatch
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from service.match_service import update_match
 
 class Scoreboard(UserControl):
-    def __init__(self, match: TennisMatch):
+    def __init__(self, match: TennisMatch, page: ft.Page):
         super().__init__()
         self.match = match
+        self.page = page
         self.placar_1 = Row(
             spacing=0,
         )
@@ -198,7 +203,20 @@ class Scoreboard(UserControl):
         self.botao_1 = ft.Text(value=self.match.match_moment.current_game.player1_score, size=50, color=colors.WHITE)
         self.botao_2 = ft.Text(value=self.match.match_moment.current_game.player2_score, size=50, color=colors.WHITE)       
         
-       
+        self.page.floating_action_button = ft.FloatingActionButton(icon=ft.icons.ADD, bgcolor = ft.colors.GREEN_800)
+        self.page.floating_action_button_location = ft.FloatingActionButtonLocation.CENTER_DOCKED
+        self.page.bottom_appbar = ft.BottomAppBar(
+            bgcolor=ft.colors.GREEN,
+            shape=ft.NotchShape.CIRCULAR,
+            content=ft.Row(
+                controls=[
+                    ft.IconButton(icon=ft.icons.MENU, icon_color=ft.colors.WHITE),
+                    ft.Container(expand=True),
+                    
+                    ft.IconButton(icon=ft.icons.FAVORITE, icon_color=ft.colors.WHITE),
+                ]
+            ),
+        )    
         return ft.SafeArea(
  
             content= 
@@ -435,28 +453,27 @@ class Scoreboard(UserControl):
                     ),
             )
         
-                
+
     
     def update_all(self):
         self.botao_1.value = self.match.match_moment.current_game.player1_score  
         self.botao_2.value = self.match.match_moment.current_game.player2_score 
         self.update_placar_1()
-        self.update_placar_2()    
+        self.update_placar_2()
+        update_match(self.match.match_id, self.match)
         self.update()
 
     def point_player1(self, button):
         self.match.point(self.match.player1)
-        #self.match.relatorio()
-        #self.p1_score_textfield.value = str(self.match.match_moment.current_game.player1_score)
-        #self.p2_score_textfield.value = str(self.match.match_moment.current_game.player2_score)
+
+        #atualizar bd
 
         self.update_all()
       
     def point_player2(self, button):
         self.match.point(self.match.player2)
-        #self.match.relatorio()
-        #self.p1_score_textfield.value = str(self.match.match_moment.current_game.player1_score)
-        #self.p2_score_textfield.value = str(self.match.match_moment.current_game.player2_score)
+
+        #atualizar bd
 
         self.update_all()
 
