@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import service.match_service as match_service
-from views.tennismatch import TennisMatch
+from model.tennismatch import TennisMatch
 
 
 class NewMatch(ft.Column):
@@ -57,16 +57,16 @@ class NewMatch(ft.Column):
             self.page.overlay.clear()
             self.page.update()
 
-        self.create_match_button = ft.ElevatedButton(text=ft.Text("START", weight=ft.FontWeight.BOLD), on_click=create_match)
+        self.create_match_button = ft.ElevatedButton(text="START", on_click=create_match)
 
         self.close_button = ft.IconButton(icon=ft.icons.CLOSE, icon_color=ft.colors.WHITE, alignment=ft.alignment.center_right,on_click=clear_overlay)
 
         self.controls = [
                 ft.Row(controls=[
-                    ft.Text("START A NEW MATCH", size=20, color=ft.colors.WHITE),
+                    ft.Text("START A NEW MATCH", size=20, color=ft.colors.WHITE, weight=ft.FontWeight.BOLD),
                     ft.Container(expand=True),
                         self.close_button
-                    ],
+                        ],
                     ),
                 ft.Row(
                     controls=[self.player1_name_field,

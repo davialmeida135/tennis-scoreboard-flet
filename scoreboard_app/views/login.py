@@ -2,6 +2,7 @@ import flet as ft
 import db.user_crud as user_crud
 import db.db as db
 import time
+from service import user_service
 
 class Login(ft.UserControl):
     def __init__(self, page:ft.Page):
@@ -34,22 +35,12 @@ class Login(ft.UserControl):
         username = self.username_field.value
         password = self.password_field.value
 
-        conn = db.connect()
-        if not conn:
-            self.error_field.value = "Database connection error"
+        try:
+            user = user_service.authenticate(username, password)
+            self.page.session.clear()
+            self.page.session.set("logged_user", {"id": user.id, "username": user.username})
+            self.page.go("/matches")
+        except ValueError as e:
+            self.error_field.value = str(e)
             self.update()
             return
-        if not (username and password):
-            self.error_field.value = "Please enter username and password"
-            self.update()
-            return
-        if user_crud.check_data_exists(conn,f"username = '{username}'"):
-            get_user = user_crud.get_data(conn, f"username = '{username}'")
-            
-            username_check = get_user['username'] == username
-            password_check = get_user['password'] == password
-
-            if username_check and password_check:
-                self.page.session.clear()
-                self.page.session.set("logged_user", {"id": get_user['id'], "username": get_user['username']})
-                self.page.go("/matches",)

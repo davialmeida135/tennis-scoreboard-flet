@@ -1,6 +1,6 @@
 import time
 import flet as ft
-import db.user_crud as user_crud
+import service.user_service as user_service
 import db.db as db
 
 class Signup(ft.UserControl):
@@ -42,20 +42,15 @@ class Signup(ft.UserControl):
             self.error_field.value = "Database connection error"
             self.update()
             return
-        if user_crud.check_data_exists(conn,f"username='{username}'"):
-            print("User already exists!")
-            self.error_field.value = "User already exists!"
-            self.update()
-        elif password != confirm_password:
-            print("Passwords do not match!")
-            self.error_field.value = "Passwords do not match!"
-            self.update()
-        else:
-            user_crud.create_user(conn,username, password)
-            self.page.splash = ft.ProgressBar()
+        try:
+            user_service.validate_user(username, password, confirm_password)
+            user_service.create_user(username, password)
             self.error_field.value = "User created successfully!"
             self.error_field.color = ft.colors.GREEN
             time.sleep(2)
             self.page.splash = None
-
             self.page.go("/login")
+        except ValueError as e:
+            self.error_field.value = str(e)
+            self.update()
+            return       

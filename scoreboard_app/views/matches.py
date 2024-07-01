@@ -1,8 +1,11 @@
 import flet as ft
 import sys
 import os
-from views.tennismatch import TennisMatch
+from views.edit_overlay import Edit
+from model.tennismatch import TennisMatch
+import service.match_service as match_service
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import config
 
 
 class MatchCard(ft.Card):
@@ -34,7 +37,7 @@ class MatchCard(ft.Card):
                 width=90,
                 gradient=ft.RadialGradient(
                     center=ft.alignment.bottom_right,
-                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                     radius=1,
                 ),
                 border_radius=ft.border_radius.all(5),
@@ -53,7 +56,7 @@ class MatchCard(ft.Card):
                     gradient=ft.LinearGradient(
                         begin=ft.alignment.top_center,
                         end=ft.alignment.bottom_center,
-                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        colors=[config.MAIN_COLOR_2,config.MAIN_COLOR_1,],
                         
                     ),
                     border_radius=ft.border_radius.all(5),
@@ -70,7 +73,7 @@ class MatchCard(ft.Card):
                         gradient=ft.LinearGradient(
                             begin=ft.alignment.top_center,
                             end=ft.alignment.bottom_center,
-                            colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                            colors=[config.CURRENT_SET_COLOR_1,config.CURRENT_SET_COLOR_2,],
                             
                         ),
                         border_radius=ft.border_radius.all(5),
@@ -96,7 +99,7 @@ class MatchCard(ft.Card):
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
                     end=ft.alignment.bottom_center,
-                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                    colors=[config.CURRENT_GAME_COLOR_1,config.CURRENT_GAME_COLOR_2,],
                 ),
             )
         )
@@ -114,7 +117,7 @@ class MatchCard(ft.Card):
                 width=90,
                 gradient=ft.RadialGradient(
                     center=ft.alignment.bottom_right,
-                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                     radius=1,
                 ),
                 border_radius=ft.border_radius.all(5),
@@ -133,7 +136,7 @@ class MatchCard(ft.Card):
                     gradient=ft.LinearGradient(
                         begin=ft.alignment.top_center,
                         end=ft.alignment.bottom_center,
-                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        colors=[config.MAIN_COLOR_2,config.MAIN_COLOR_1,],
                         
                     ),
                     border_radius=ft.border_radius.all(5),
@@ -150,7 +153,7 @@ class MatchCard(ft.Card):
                         gradient=ft.LinearGradient(
                             begin=ft.alignment.top_center,
                             end=ft.alignment.bottom_center,
-                            colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                            colors=[config.CURRENT_SET_COLOR_1,config.CURRENT_SET_COLOR_2,],
                             
                         ),
                         border_radius=ft.border_radius.all(5),
@@ -176,7 +179,7 @@ class MatchCard(ft.Card):
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
                     end=ft.alignment.bottom_center,
-                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                    colors=[config.CURRENT_GAME_COLOR_1,config.CURRENT_GAME_COLOR_2,],
                 ),
             )
         )
@@ -192,7 +195,10 @@ class MatchCard(ft.Card):
                         ft.ListTile(
                             leading=ft.Icon(ft.icons.SPORTS_TENNIS, color=ft.colors.YELLOW),
                             title=ft.Text(self.match.title, weight= ft.FontWeight.BOLD),
-                            trailing=ft.IconButton(icon=ft.icons.EDIT, on_click=self.edit),
+                            trailing=ft.Column(controls=[
+                                ft.IconButton(icon=ft.icons.EDIT, on_click=self.edit),
+                            ],
+                            ),
                             on_click=self.view_match,
                         ),
                         
@@ -225,7 +231,40 @@ class MatchCard(ft.Card):
         self.page.go(f"/match/{self.match.match_id}")
         print("View", self.match)
 
+
+
+
     def edit(self, b):
+        if self.page.width > self.page.height:
+            margem = ft.margin.symmetric(horizontal=self.page.width/4, vertical=self.page.height/6)
+            relative_width = self.page.width/2
+            relative_height = self.page.height/7
+        else:
+            margem = ft.margin.symmetric(horizontal=self.page.width/10, vertical=self.page.height/6)
+            relative_width = self.page.width/1.2
+            relative_height = self.page.height/7
+
+        self.page.overlay.clear()
+        self.page.overlay.append(
+            ft.Container(
+                content=Edit(self.page,self.match),
+                padding=5,
+                width=relative_width,
+                height=relative_height,
+                bgcolor=config.MAIN_COLOR_1,
+                alignment=ft.alignment.center,
+                border_radius=ft.border_radius.all(10),
+                margin=margem,
+                shadow=ft.BoxShadow(
+                    spread_radius=0.5,
+                    blur_radius=5,
+                    color=ft.colors.BLACK,
+                    offset=ft.Offset(0, 0),
+                    blur_style=ft.ShadowBlurStyle.NORMAL,
+                ),
+            )
+        )
+        self.page.update()
         print("Edit", self.match)
         #self.page.splash()
         

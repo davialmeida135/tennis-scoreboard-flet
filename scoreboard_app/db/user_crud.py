@@ -42,10 +42,24 @@ def delete_user(conn, username):
     )
     conn.commit()
 
+def get_user_password(conn, username):
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT password FROM user WHERE username = ? LIMIT 1", (username,)
+    )
+    return cursor.fetchone()[0]
+
 def authenticate(conn, username, password):
     cursor = conn.cursor()
     cursor.execute(
         "SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1", (username, password)
     )
     return cursor.fetchone() is not None
+
+def get_user_id(conn, username):
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id FROM user WHERE username = ? LIMIT 1", (username,)
+    )
+    return cursor.fetchone()[0]
 

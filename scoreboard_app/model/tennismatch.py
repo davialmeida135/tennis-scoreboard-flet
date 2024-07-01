@@ -36,6 +36,7 @@ class TennisMatch:
         match.match_moment = MatchMoment.from_dict(data['match_moment'])  # assuming MatchMoment has a from_dict method
         match.history_undo = [MatchMoment.from_dict(moment) for moment in data['history_undo']]  # assuming MatchMoment has a from_dict method
         match.history_redo = [MatchMoment.from_dict(moment) for moment in data['history_redo']]  # assuming MatchMoment has a from_dict method
+        match.title = data['title']
         return match
     
     @classmethod

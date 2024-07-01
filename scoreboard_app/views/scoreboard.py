@@ -13,8 +13,10 @@ from flet import (
     colors,
     TextField
     )
+import config
+from views.stream_url_overlay import StreamUrl
 
-from views.tennismatch import TennisMatch
+from model.tennismatch import TennisMatch
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from service.match_service import update_match
 
@@ -43,7 +45,7 @@ class Scoreboard(UserControl):
                 width=90,
                 gradient=ft.RadialGradient(
                     center=ft.alignment.bottom_right,
-                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                     radius=1,
                 ),
                 #border_radius=ft.border_radius.all(5),
@@ -62,7 +64,7 @@ class Scoreboard(UserControl):
                     gradient=ft.LinearGradient(
                         begin=ft.alignment.top_center,
                         end=ft.alignment.bottom_center,
-                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        colors=[config.MAIN_COLOR_2,config.MAIN_COLOR_1,],
                         
                     ),
                     #border_radius=ft.border_radius.all(5),
@@ -79,7 +81,7 @@ class Scoreboard(UserControl):
                         gradient=ft.LinearGradient(
                             begin=ft.alignment.top_center,
                             end=ft.alignment.bottom_center,
-                            colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                            colors=[config.CURRENT_SET_COLOR_1,config.CURRENT_SET_COLOR_2,],
                             
                         ),
                         border_radius=ft.border_radius.all(5),
@@ -105,7 +107,7 @@ class Scoreboard(UserControl):
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
                     end=ft.alignment.bottom_center,
-                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                    colors=[config.CURRENT_GAME_COLOR_1,config.CURRENT_GAME_COLOR_2,],
                 ),
             )
         )
@@ -123,7 +125,7 @@ class Scoreboard(UserControl):
                 width=90,
                 gradient=ft.RadialGradient(
                     center=ft.alignment.bottom_right,
-                    colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                    colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                     radius=1,
                 ),
                 #border_radius=ft.border_radius.all(5),
@@ -142,7 +144,7 @@ class Scoreboard(UserControl):
                     gradient=ft.LinearGradient(
                         begin=ft.alignment.top_center,
                         end=ft.alignment.bottom_center,
-                        colors=[ft.colors.LIGHT_GREEN_900,ft.colors.GREEN_800,],
+                        colors=[config.MAIN_COLOR_2,config.MAIN_COLOR_1,],
                         
                     ),
                     #border_radius=ft.border_radius.all(5),
@@ -160,7 +162,7 @@ class Scoreboard(UserControl):
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
                     end=ft.alignment.bottom_center,
-                    colors=[ft.colors.LIGHT_GREEN,ft.colors.GREEN,],
+                    colors=[config.CURRENT_SET_COLOR_1,config.CURRENT_SET_COLOR_2,],
                     
                 ),
                 border_radius=ft.border_radius.all(5),
@@ -186,7 +188,7 @@ class Scoreboard(UserControl):
                 gradient=ft.LinearGradient(
                     begin=ft.alignment.top_center,
                     end=ft.alignment.bottom_center,
-                    colors=[ft.colors.WHITE, ft.colors.GREY_400],
+                    colors=[config.CURRENT_GAME_COLOR_1,config.CURRENT_GAME_COLOR_2,],
                 ),
             )
         )
@@ -203,10 +205,10 @@ class Scoreboard(UserControl):
         self.botao_1 = ft.Text(value=self.match.match_moment.current_game.player1_score, size=50, color=colors.WHITE)
         self.botao_2 = ft.Text(value=self.match.match_moment.current_game.player2_score, size=50, color=colors.WHITE)       
         
-        self.page.floating_action_button = ft.FloatingActionButton(icon=ft.icons.ADD, bgcolor = ft.colors.GREEN_800)
+        self.page.floating_action_button = ft.FloatingActionButton(icon=ft.icons.ADD, bgcolor = config.MAIN_COLOR_1)
         self.page.floating_action_button_location = ft.FloatingActionButtonLocation.CENTER_DOCKED
         self.page.bottom_appbar = ft.BottomAppBar(
-            bgcolor=ft.colors.GREEN,
+            bgcolor=config.BOTTOM_BAR,
             shape=ft.NotchShape.CIRCULAR,
             content=ft.Row(
                 controls=[
@@ -223,7 +225,7 @@ class Scoreboard(UserControl):
             Container(
                         #width=300,
                         #height=450,
-                        bgcolor=ft.colors.DEEP_ORANGE_500,
+                        bgcolor=config.APP_BG,
                         #border_radius=border_radius.all(5),
                         padding=4,
                         content=Column(
@@ -256,7 +258,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),  
                                             content=Row(
                                                 alignment=ft.MainAxisAlignment.CENTER,
@@ -280,7 +282,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),
                                             border_radius=border_radius.all(5),
                                             content=Row(
@@ -308,7 +310,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),
                                             border_radius=border_radius.all(10),
                                             content=ft.FilledButton(
@@ -339,7 +341,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),
                                             border_radius=border_radius.all(10),
                                             content=ft.FilledButton(
@@ -371,7 +373,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),
                                             border_radius=border_radius.all(10),
                                             content=ft.FilledButton(
@@ -401,7 +403,7 @@ class Scoreboard(UserControl):
                                             gradient=ft.LinearGradient(
                                                 begin=ft.alignment.top_center,
                                                 end=ft.alignment.bottom_center,
-                                                colors=[ft.colors.GREEN_800,ft.colors.LIGHT_GREEN_900],
+                                                colors=[config.MAIN_COLOR_1,config.MAIN_COLOR_2],
                                             ),
                                             border_radius=border_radius.all(10),
                                             content=ft.FilledButton(
@@ -461,6 +463,8 @@ class Scoreboard(UserControl):
         self.update_placar_1()
         self.update_placar_2()
         update_match(self.match.match_id, self.match)
+        topic_name = "match_topic_"+str(self.match.match_id)
+        self.page.pubsub.send_all_on_topic(topic_name,self.match)
         self.update()
 
     def point_player1(self, button):
