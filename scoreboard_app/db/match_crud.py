@@ -1,16 +1,5 @@
 import requests
-def get_data(conn, conditions=None):
-    cursor = conn.cursor()
-    if conditions:
-        cursor.execute(f"SELECT * FROM match WHERE {conditions}")
-    else:
-        cursor.execute(f"SELECT * FROM match")
 
-    rows = cursor.fetchall()
-    columns = [col[0] for col in cursor.description]
-
-    result = [{columns[i]:row[i] for i in range(len(columns))} for row in rows]
-    return result
 
 def create_match(api_url, match_data, token):
     headers = {
