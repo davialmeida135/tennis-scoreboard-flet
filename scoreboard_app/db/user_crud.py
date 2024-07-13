@@ -1,65 +1,42 @@
-import sqlite3
-import db
+import requests
 
-def get_data(conn, conditions=None):
-    cursor = conn.cursor()
-    if conditions:
-        cursor.execute(f"SELECT * FROM user WHERE {conditions}")
+API_URL = "http://localhost:5000"
+
+def create_user(username, password):
+    payload = {"username": username, "password": password.decode('utf-8')}
+    response = requests.post(f"{API_URL}/users/new", json=payload)
+    if 'error' in response.json():
+        raise Exception(f"{response.json()['error']}")
+    return f'User {username} created successfully'
+
+def delete_user(username, password, access_token):
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+    payload = {"username": username, "password": password}
+    response = requests.post(f"{API_URL}/users/delete", json=payload, headers=headers)
+    if response.status_code == 200:
+        print("User deleted successfully")
     else:
-        cursor.execute(f"SELECT * FROM user")
+        raise Exception(f"Failed to delete user: {response.status_code} - {response.text}")
 
-    rows = cursor.fetchall()
-    columns = [col[0] for col in cursor.description]
-    print(columns)
+def update_user(username, password, access_token, newpassword=None, ):
+    headers = {'Authorization': f'Bearer {access_token}'}
+    if newpassword is not None:
+        payload = {"username": username, "password": password, "new_password": newpassword}
+    else:
+        payload = {"username": username, "password": password}
+    response = requests.put(f"{API_URL}/users/update", json=payload, headers=headers)
+    if response.status_code == 200:
+        return response
+    else:
+        raise Exception(f"Failed to update user: {response.status_code} - {response.text}")
 
-    result = {columns[i]: row[i] for row in rows for i in range(len(columns))}
-    #print(result)
-    return result
-
-def check_data_exists(conn,condition):
-    cursor = conn.cursor()
-    cursor.execute(f"SELECT EXISTS (SELECT 1 FROM user WHERE {condition})")
-    return cursor.fetchone()[0]==1
-
-def create_user(conn, username, password):
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO user (username, password) VALUES (?, ?)", (username, password)
-    )
-    conn.commit()
-
-def update_user(conn, username, password):
-    cursor = conn.cursor()
-    cursor.execute(
-        "UPDATE user SET password = ? WHERE username = ?", (password, username)
-    )
-    conn.commit()
-
-def delete_user(conn, username):
-    cursor = conn.cursor()
-    cursor.execute(
-        "DELETE FROM user WHERE username = ?", (username,)
-    )
-    conn.commit()
-
-def get_user_password(conn, username):
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT password FROM user WHERE username = ? LIMIT 1", (username,)
-    )
-    return cursor.fetchone()[0]
-
-def authenticate(conn, username, password):
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1", (username, password)
-    )
-    return cursor.fetchone() is not None
-
-def get_user_id(conn, username):
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT id FROM user WHERE username = ? LIMIT 1", (username,)
-    )
-    return cursor.fetchone()[0]
+def auth_user(username, password):
+    payload = {"username": username, "password": password}
+    response = requests.post(f"{API_URL}/auth", json=payload)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"Failed to authenticate user: {response.status_code} - {response.text}")
 

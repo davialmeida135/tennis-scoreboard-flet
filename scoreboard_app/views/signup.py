@@ -37,11 +37,6 @@ class Signup(ft.UserControl):
         password = self.password_field.value
         confirm_password = self.confirm_password_field.value
 
-        conn = db.connect()
-        if not conn:
-            self.error_field.value = "Database connection error"
-            self.update()
-            return
         try:
             user_service.validate_user(username, password, confirm_password)
             user_service.create_user(username, password)
@@ -50,7 +45,7 @@ class Signup(ft.UserControl):
             time.sleep(2)
             self.page.splash = None
             self.page.go("/login")
-        except ValueError as e:
+        except (Exception,ValueError) as e:
             self.error_field.value = str(e)
             self.update()
             return       
