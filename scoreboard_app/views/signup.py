@@ -42,7 +42,7 @@ class Signup(ft.UserControl):
             user_service.create_user(username, password)
             self.error_field.value = "User created successfully!"
             self.error_field.color = ft.colors.GREEN
-            time.sleep(2)
+            #time.sleep(2)
             self.page.splash = None
             self.page.go("/login")
         except (Exception,ValueError) as e:

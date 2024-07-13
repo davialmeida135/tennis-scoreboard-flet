@@ -1,6 +1,7 @@
+import time
 import requests
-
-API_URL = "http://localhost:5000"
+import os
+from . import API_URL
 
 def create_user(username, password):
     payload = {"username": username, "password": password.decode('utf-8')}
@@ -33,8 +34,10 @@ def update_user(username, password, access_token, newpassword=None, ):
         raise Exception(f"Failed to update user: {response.status_code} - {response.text}")
 
 def auth_user(username, password):
+    first = time.time()
     payload = {"username": username, "password": password}
     response = requests.post(f"{API_URL}/auth", json=payload)
+    print("Time taken for api request: ",time.time() - first)
     if response.status_code == 200:
         return response.json()
     else:

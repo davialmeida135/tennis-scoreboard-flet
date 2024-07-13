@@ -14,6 +14,7 @@ from flet import (
     TextField
     )
 import config
+from service import user_service
 from views.stream_url_overlay import StreamUrl
 
 from model.tennismatch import TennisMatch
@@ -462,7 +463,8 @@ class Scoreboard(UserControl):
         self.botao_2.value = self.match.match_moment.current_game.player2_score 
         self.update_placar_1()
         self.update_placar_2()
-        update_match(self.match.match_id, self.match)
+        
+        update_match(self.match)
         topic_name = "match_topic_"+str(self.match.match_id)
         self.page.pubsub.send_all_on_topic(topic_name,self.match)
         self.update()

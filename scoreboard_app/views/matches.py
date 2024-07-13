@@ -286,11 +286,12 @@ class MatchList(ft.ListView):
 class Matches(ft.Column):
     def __init__(self, page: ft.Page, match_list):
         super().__init__()
-        self.match_list=match_list
+        self.match_list=match_list[::-1]
         self.page = page
         #self.height = page.height-50
         self.user_display = ft.Text("Usuario legal")
         self.expand=True
+        
 
     def build(self):
         return ft.SafeArea( 

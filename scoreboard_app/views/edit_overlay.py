@@ -29,7 +29,7 @@ class Edit(ft.Column):
         
         def edit_match(e):
             self.match.title = self.match_name_field.value
-            match_service.update_match(self.match.match_id, self.match)
+            match_service.update_match(self.match)
             self.page.overlay.clear()
             self.page.update()
             page.go("/matches/new")

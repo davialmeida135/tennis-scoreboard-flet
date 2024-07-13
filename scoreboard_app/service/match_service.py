@@ -1,50 +1,50 @@
 import db.match_crud as mcrud
 from model.tennismatch import TennisMatch
 from db import db
+from model.user import User
+import json
+from service import user_service
 
-def get_player_matches(player_id):
-    conn = db.connect()
-    player_matches = mcrud.get_data(conn, f"owner_id = {player_id}")
-    conn.close()
+def get_player_matches(user: User):
+    player_matches = mcrud.get_user_matches(user.access_token)
     match_array = []
     for match_query in player_matches:
-        match_obj=TennisMatch.from_json(match_query['match_info'])
-        match_obj.match_id = match_query['id']
+        match_obj=TennisMatch.from_json(match_query)
+        match_obj.relatorio()
         match_array.append(match_obj)
     return match_array
 
-def get_player_matches_id(player_id):
-    conn = db.connect()
-    player_matches = mcrud.get_data(conn, f"owner_id = {player_id}")
-    conn.close()
+def get_player_matches_id(user: User):
+    player_matches = mcrud.get_user_matches(user.access_token)
+    print('=')
+    print(player_matches)
+    print('=')
     match_array = []
     for match_query in player_matches:
-        match_array.append(match_query['id'])
+        match_query = json.loads(match_query)
+        match_array.append(match_query['idMatch'])
     return match_array
 
 
-def add_match(owner_id, match: TennisMatch):
-    print("adding match")
-    match_info = match.to_json()
-    conn = db.connect()
-    mcrud.create_match(conn, owner_id, match_info)
-    conn.close()
+def add_match(match: TennisMatch):
+    
+    access_token,refresh_token = user_service.load_tokens()
+    match_info = match.to_json() 
+    mcrud.create_match(match_info, access_token, refresh_token)
+
 
 def get_match(match_id):
-    conn = db.connect()
-    match = mcrud.get_data(conn, f"id = {match_id}")
-    conn.close()
-    match = TennisMatch.from_json(match[0]['match_info'])
+    match = mcrud.get_match_by_id(match_id)
+    print(match)
+    match = TennisMatch.from_dict(match)
     match.match_id = match_id
     return match
 
-def update_match(match_id, match: TennisMatch):
-    conn = db.connect()
+def update_match(match: TennisMatch):
+    access_token,refresh_token = user_service.load_tokens()
     match_info = match.to_json()
-    mcrud.update_match(conn, match_id, match_info)
-    conn.close()
+    mcrud.update_match(match_info, access_token, refresh_token)
 
-def delete_match(match_id):
-    conn = db.connect()
-    mcrud.delete_match(conn, match_id)
-    conn.close()
+def delete_match(match_id, token):
+
+    mcrud.delete_match(match_id, token)

@@ -4,12 +4,12 @@ import json
 import sys, os
 
 class TennisMatch:
-    def __init__(self, player1: str, player2: str, match_id=None, max_sets=3):
+    def __init__(self, player1: str, player2: str, ownerUsername= None, match_id=None, max_sets=3):
         self.match_id = match_id
         self.player1 = player1
         self.player2 = player2
         self.match_moment = MatchMoment()
-        self.ownerUsername = None
+        self.ownerUsername = ownerUsername
         self.history_undo = []
         self.history_redo = []
         self.max_sets = max_sets
@@ -354,7 +354,7 @@ q = TennisMatch.from_json("""
 }
 
 """)
-q.relatorio()
+"""q.relatorio()
 q.point('Jonas')
 q.relatorio()
-print(q.to_json())
+print(q.to_json())"""

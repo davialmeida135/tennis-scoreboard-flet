@@ -29,15 +29,15 @@ def main(page: ft.Page):
             ],
             )
         )
-
         if troute.match("/match/:id"):
             # Check if user is logged in
             if page.session.contains_key("logged_user"):
                 match_id = troute.id
                 print('match: '+ str(match_id))
-                print('user id: '+str(page.session.get("logged_user")['id']))
-                print('player matches: '+str(get_player_matches_id(page.session.get("logged_user")['id'])))
-                if int(match_id) in get_player_matches_id(page.session.get("logged_user")['id']):
+                logged_user = User(logged_user=page.session.get("logged_user"))
+                print('player matches: '+str(get_player_matches_id(logged_user)))
+                
+                if int(match_id) in get_player_matches_id(logged_user):
                     match = get_match(match_id)
                     page.views.append(
                         ft.View(
@@ -95,8 +95,8 @@ def main(page: ft.Page):
             
             # Check if user is logged in
             if page.session.contains_key("logged_user"):
-                user_id = page.session.get("logged_user")['id']
-                user_matches = get_player_matches(user_id)   
+                logged_user = User(logged_user=page.session.get("logged_user"))
+                user_matches = get_player_matches(logged_user)   
                 page.views.append(
                     ft.View(
                     route ="/matches",

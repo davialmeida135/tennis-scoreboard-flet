@@ -38,7 +38,7 @@ class Login(ft.UserControl):
         try:
             user = user_service.authenticate(username, password)
             self.page.session.clear()
-            self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})
+            self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})            
             print("login bem sucedido!")
             self.page.go("/matches")
         except (Exception,ValueError) as e:
