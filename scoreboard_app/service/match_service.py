@@ -1,6 +1,5 @@
 import db.match_crud as mcrud
 from model.tennismatch import TennisMatch
-from db import db
 from model.user import User
 import json
 from service import user_service
@@ -10,15 +9,18 @@ def get_player_matches(user: User):
     match_array = []
     for match_query in player_matches:
         match_obj=TennisMatch.from_json(match_query)
-        match_obj.relatorio()
+        #match_obj.relatorio()
         match_array.append(match_obj)
+        print(match_query)
+    
+   
     return match_array
 
 def get_player_matches_id(user: User):
     player_matches = mcrud.get_user_matches(user.access_token)
-    print('=')
-    print(player_matches)
-    print('=')
+    #print('=')
+    #print(player_matches)
+    #print('=')
     match_array = []
     for match_query in player_matches:
         match_query = json.loads(match_query)
@@ -35,7 +37,7 @@ def add_match(match: TennisMatch):
 
 def get_match(match_id):
     match = mcrud.get_match_by_id(match_id)
-    print(match)
+    #print(match)
     match = TennisMatch.from_dict(match)
     match.match_id = match_id
     return match

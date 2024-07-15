@@ -1,7 +1,6 @@
 import time
 import flet as ft
 import service.user_service as user_service
-import db.db as db
 
 class Signup(ft.UserControl):
     def __init__(self, page: ft.Page):

@@ -31,7 +31,7 @@ class TennisMatch:
 
     @classmethod
     def from_dict(cls, data):
-        match = cls(data['player1'], data['player2'], data['idMatch'])
+        match = cls(data['player1'], data['player2'], match_id=data['idMatch'])
         if 'ownerUsername' in data:
             match.ownerUsername = data['ownerUsername']
         match.match_moment = MatchMoment.from_dict(data['moments'][0])
@@ -158,16 +158,16 @@ class TennisMatch:
         return
 
     def relatorio(self):
-        print("Match id: ", self.match_id)
-        print("Player 1: ", self.player1)
-        print("Player 2: ", self.player2)
+        #print("Match id: ", self.match_id)
+        #print("Player 1: ", self.player1)
+        #print("Player 2: ", self.player2)
 
         for set in range(len(self.match_moment.sets)):
-            print(str(set) + " set : ")
+            #print(str(set) + " set : ")
             self.match_moment.sets[set].print_scores()
-        print("Current Set: ")
+        #print("Current Set: ")
         self.match_moment.current_set.print_scores()
-        print("Current game: ")
+        #print("Current game: ")
         self.match_moment.current_game.print_scores()
 
 class MatchMoment:
@@ -312,9 +312,9 @@ for i in range(16):
 p.point('Gustavo')
 
 #p.relatorio()
-#print("==========================================")
-#print(p.to_json())
-print("==========================================")
+##print("==========================================")
+##print(p.to_json())
+##print("==========================================")
 
 q = TennisMatch.from_json("""
 {
@@ -357,4 +357,4 @@ q = TennisMatch.from_json("""
 """q.relatorio()
 q.point('Jonas')
 q.relatorio()
-print(q.to_json())"""
+#print(q.to_json())"""

@@ -1,6 +1,5 @@
 import flet as ft
 import db.user_crud as user_crud
-import db.db as db
 import time
 from service import user_service
 
@@ -39,7 +38,7 @@ class Login(ft.UserControl):
             user = user_service.authenticate(username, password)
             self.page.session.clear()
             self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})            
-            print("login bem sucedido!")
+            #print("login bem sucedido!")
             self.page.go("/matches")
         except (Exception,ValueError) as e:
             self.error_field.value = str(e)

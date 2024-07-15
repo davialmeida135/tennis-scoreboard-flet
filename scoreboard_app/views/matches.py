@@ -229,7 +229,7 @@ class MatchCard(ft.Card):
 
     def view_match(self, b):
         self.page.go(f"/match/{self.match.match_id}")
-        print("View", self.match)
+        #print("View", self.match)
 
 
 
@@ -265,7 +265,7 @@ class MatchCard(ft.Card):
             )
         )
         self.page.update()
-        print("Edit", self.match)
+        #print("Edit", self.match)
         #self.page.splash()
         
 

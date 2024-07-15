@@ -42,7 +42,7 @@ class NewMatch(ft.Column):
             
         )
         def create_match(e):
-            print("Create match clicked")
+            #print("Create match clicked")
             player1_name = self.player1_name_field.value
             player2_name = self.player2_name_field.value
             max_sets = self.max_sets_dropdown.value

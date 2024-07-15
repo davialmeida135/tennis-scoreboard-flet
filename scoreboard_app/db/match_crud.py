@@ -35,7 +35,7 @@ def get_user_matches(token, conditions=None):
     if response.status_code == 200:
         return response.json()
     else:
-        print(f"Failed to get data: {response.status_code} - {response.text}")
+        #print(f"Failed to get data: {response.status_code} - {response.text}")
         return None
     
 def get_match_by_id(match_id):

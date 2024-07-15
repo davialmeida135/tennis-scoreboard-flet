@@ -12,10 +12,10 @@ from views.scoreboard_stream import ScoreboardStream
 import config
 
 def main(page: ft.Page):
-    print("initial route:", page.route)
+    #print("initial route:", page.route)
 
     def route_change(e):
-        print("Route change:", e.route)
+        #print("Route change:", e.route)
         page.views.clear()
         
         troute = ft.TemplateRoute(e.route)
@@ -33,9 +33,9 @@ def main(page: ft.Page):
             # Check if user is logged in
             if page.session.contains_key("logged_user"):
                 match_id = troute.id
-                print('match: '+ str(match_id))
+                #print('match: '+ str(match_id))
                 logged_user = User(logged_user=page.session.get("logged_user"))
-                print('player matches: '+str(get_player_matches_id(logged_user)))
+                #print('player matches: '+str(get_player_matches_id(logged_user)))
                 
                 if int(match_id) in get_player_matches_id(logged_user):
                     match = get_match(match_id)
@@ -127,7 +127,7 @@ def main(page: ft.Page):
         elif e.route =="/matches/new":
             page.go("/matches")
         elif e.route == '/signup':
-            print("Signup changed")
+            #print("Signup changed")
             page.views.append(
                 ft.View(
                 route ="/signup",
@@ -141,7 +141,7 @@ def main(page: ft.Page):
             )
         
         elif e.route == '/login':
-            print("Login changed")
+            #print("Login changed")
             page.views.append(
                 ft.View(
                 route ="/login",
@@ -158,7 +158,7 @@ def main(page: ft.Page):
         page.update()
 
     def view_pop(e):
-        print("View pop:", e.view)
+        #print("View pop:", e.view)
         page.views.pop()
         top_view = page.views[-1]
         page.go(top_view.route)
@@ -214,8 +214,8 @@ def main(page: ft.Page):
         page.update()
         
     def open_create_match(e):
-        print(page.width)
-        print(page.height)
+        #print(page.width)
+        #print(page.height)
 
         if page.width > page.height:
             margem = ft.margin.symmetric(horizontal=page.width/4, vertical=page.height/6)

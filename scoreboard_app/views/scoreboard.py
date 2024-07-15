@@ -484,11 +484,11 @@ class Scoreboard(UserControl):
         self.update_all()
 
     def undo_pressed(self, button):
-        #print("Undo")
+        ##print("Undo")
         self.match.undo()
         self.update_all()
    
     def redo_pressed(self, button):
-        #print("redo")
+        ##print("redo")
         self.match.redo()
         self.update_all()

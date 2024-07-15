@@ -1,1 +1,4 @@
-flet==0.22.*
+flet==0.22.0
+python-dotenv
+requests
+passlib

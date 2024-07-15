@@ -1,7 +1,6 @@
 import sqlite3
 from db import user_crud
-import bcrypt
-from db import db
+from passlib.hash import pbkdf2_sha256
 from model.user import User
 import os
 
@@ -16,7 +15,7 @@ def load_tokens():
 
 def hash_password(password):
     """Hash a password for storing."""
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return pbkdf2_sha256.hash(password)
 
 def create_user(username, password):
     
