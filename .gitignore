@@ -1,2 +1,5 @@
 
 scoreboard-app/db.db
+.venv
+
+/.venv
