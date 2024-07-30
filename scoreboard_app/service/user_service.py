@@ -34,6 +34,7 @@ def authenticate(username, password):
     if auth_response:
         user = User(username,auth_response['access_token'],auth_response['refresh_token'])
         save_tokens(auth_response['access_token'],auth_response['refresh_token'])
+        print(auth_response['access_token'],auth_response['refresh_token'])
         return user
     else:
         raise ValueError("Invalid username or password")

@@ -7,6 +7,7 @@ load_dotenv(os.path.join(basedir, '.env'))  # Load environment variables from .e
 url = os.getenv('API_URL')
 port = os.getenv('API_PORT')
 protocol = os.getenv('API_PROTOCOL')'''
-API_URL = 'http://192.168.0.43:5000'
+#API_URL = 'http://192.168.0.43:80'
+API_URL = 'http://127.0.0.1:5000'
 
 #API_URL = f'{protocol}://{url}:{port}'  # API URL

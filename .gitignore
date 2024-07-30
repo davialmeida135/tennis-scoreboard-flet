@@ -3,3 +3,11 @@ scoreboard-app/db.db
 \.venv
 scoreboard-app/model/__pycache__
 /.venv
+venv
+/scoreboard_app/service/__pycache__
+/scoreboard_app/views/__pycache__
+/.venv/Lib
+/scoreboard_app/__pycache__
+/scoreboard_app/db/__pycache__
+/scoreboard_app/model/__pycache__
+.env

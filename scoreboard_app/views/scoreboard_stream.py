@@ -1,6 +1,13 @@
 from typing import Any
 import flet as ft
 import sys,os
+import websockets
+import asyncio
+import json
+import config
+import threading
+from service.match_service import *
+from db import API_URL
 from flet import (
     Column,
     Container,
@@ -17,7 +24,7 @@ from flet import (
 from model.tennismatch import TennisMatch
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from service.match_service import update_match
-import config
+
 
 class ScoreboardStream(UserControl):
     def __init__(self, match: TennisMatch, page: ft.Page):
@@ -32,7 +39,39 @@ class ScoreboardStream(UserControl):
         )
 
         self.topic_name = "match_topic_"+str(self.match.match_id)
-        page.pubsub.subscribe_topic(self.topic_name, self.on_score_updated)
+        #page.pubsub.subscribe_topic(self.topic_name, self.on_score_updated)
+        # Define the topic for WebSocket subscription
+        self.topic_name = f"match_update_{self.match.match_id}"
+
+
+        # Ensure the event loop is running before creating the task
+        # Start the event loop in a new thread
+        threading.Thread(target=self.start_event_loop, daemon=True).start()
+
+    def start_event_loop(self):
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+        self.loop.run_until_complete(self.connect_to_websocket())
+
+    async def connect_to_websocket(self):
+        #uri = "ws://192.168.0.43:80/ws"
+        uri = "ws://127.0.0.1:5000/ws"
+        try:
+            async with websockets.connect(uri) as websocket:
+                print("WebSocket connected")
+                await self.listen_for_updates(websocket)
+        except Exception as e:
+            print(f"WebSocket connection failed: {e}")
+
+    async def listen_for_updates(self, websocket):
+        try:
+            async for message in websocket:
+                print("Received message:", message)
+                match = TennisMatch.from_json(json.loads(message)["data"])
+                self.on_score_updated(match=match)
+                print("Match updated")
+        except Exception as e:
+            print(f"WebSocket error during message reception: {e}")
 
     def update_placar_1(self):
         self.placar_1.controls.clear()
@@ -195,7 +234,8 @@ class ScoreboardStream(UserControl):
             )
         )
     
-    def on_score_updated(self, e, match):
+    def on_score_updated(self, e=None, match=None):
+        print("updated")
         self.match=match
         self.update_placar_1()
         self.update_placar_2()
@@ -247,4 +287,3 @@ class ScoreboardStream(UserControl):
                         ),
                     ),
             )
-        
