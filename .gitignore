@@ -1,5 +1,5 @@
-
 scoreboard-app/db.db
-.venv
-
+.\.venv
+\.venv
+scoreboard-app/model/__pycache__
 /.venv
