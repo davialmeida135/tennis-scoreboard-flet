@@ -54,8 +54,8 @@ class ScoreboardStream(UserControl):
         self.loop.run_until_complete(self.connect_to_websocket())
 
     async def connect_to_websocket(self):
-        #uri = "ws://192.168.0.43:80/ws"
-        uri = "ws://127.0.0.1:5000/ws"
+        uri = "ws://192.168.0.43:80/ws"
+        #uri = "ws://127.0.0.1:5000/ws"
         try:
             async with websockets.connect(uri) as websocket:
                 print("WebSocket connected")
@@ -78,7 +78,7 @@ class ScoreboardStream(UserControl):
         #Nome do jogador
         self.placar_1.controls.append(
             ft.Container(
-                content=ft.Text(size=14,value=self.match.player1.upper(), color=colors.WHITE,weight=ft.FontWeight.W_900,width=90,max_lines=2),
+                content=ft.Text(size=config.SCOREBOARD_PLAYER_SIZE,value=self.match.player1.upper(), color=colors.WHITE,weight=ft.FontWeight.W_900,width=90,max_lines=2),
                 alignment=ft.alignment.center,
                 
                 padding=5,
@@ -97,7 +97,7 @@ class ScoreboardStream(UserControl):
         for set in self.match.match_moment.sets:
             self.placar_1.controls.append(
                 ft.Container(
-                    content=ft.Text(value=set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    content=ft.Text(value=set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                     alignment=ft.alignment.center,
                     padding=5,
                     height=50,
@@ -114,7 +114,7 @@ class ScoreboardStream(UserControl):
         #Set em andamento
         self.placar_1.controls.append(
             ft.Container(
-                        content=ft.Text(value=self.match.match_moment.current_set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                        content=ft.Text(value=self.match.match_moment.current_set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                         alignment=ft.alignment.center,
                         padding=10,
                         height=50,
@@ -139,6 +139,7 @@ class ScoreboardStream(UserControl):
                     width=100,
                     max_lines=2,
                     text_align=ft.TextAlign.CENTER,
+                    size=config.SCOREBOARD_TEXT_SIZE,
                     ),
                 alignment=ft.alignment.center,
                 width=51.6,
@@ -158,7 +159,7 @@ class ScoreboardStream(UserControl):
         #Nome do jogador
         self.placar_2.controls.append(
             ft.Container(
-                content=ft.Text(size=14,value=self.match.player2.upper(), color=colors.WHITE,weight=ft.FontWeight.W_900,width=90,max_lines=2),
+                content=ft.Text(size=config.SCOREBOARD_PLAYER_SIZE,value=self.match.player2.upper(), color=colors.WHITE,weight=ft.FontWeight.W_900,width=90,max_lines=2),
                 alignment=ft.alignment.center,
                 
                 padding=5,
@@ -177,7 +178,7 @@ class ScoreboardStream(UserControl):
         for set in self.match.match_moment.sets:
             self.placar_2.controls.append(
                 ft.Container(
-                    content=ft.Text(value=set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    content=ft.Text(value=set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                     alignment=ft.alignment.center,
                     padding=5,
                     height=50,
@@ -195,7 +196,7 @@ class ScoreboardStream(UserControl):
         #Set em andamento
         self.placar_2.controls.append(
             ft.Container(
-                content=ft.Text(value=self.match.match_moment.current_set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                content=ft.Text(value=self.match.match_moment.current_set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                 alignment=ft.alignment.center,
                 padding=10,
                 height=50,
@@ -220,6 +221,7 @@ class ScoreboardStream(UserControl):
                     width=100,
                     max_lines=2,
                     text_align=ft.TextAlign.CENTER,
+                    size=config.SCOREBOARD_TEXT_SIZE,
                     ),
                 alignment=ft.alignment.center,
                 width=51.6,
