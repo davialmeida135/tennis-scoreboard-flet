@@ -11,10 +11,10 @@ from service.match_service import *
 from views.new_match_overlay import NewMatch
 from views.scoreboard_stream import ScoreboardStream
 import config
+import keyring
 
 def main(page: ft.Page):
     #print("initial route:", page.route)
-    on_app_start(page)
 
     def route_change(e):
         #print("Route change:", e.route)
@@ -169,9 +169,6 @@ def main(page: ft.Page):
         top_view = page.views[-1]
         page.go(top_view.route)
 
-    page.on_route_change = route_change
-    page.on_view_pop = view_pop
-
     def stream_overlay(e):
     
         if page.width > page.height:
@@ -216,13 +213,21 @@ def main(page: ft.Page):
 
     def logout(e):
         page.session.clear()
+        try:
+            username = keyring.get_password("tennis_username", "user")
+            keyring.delete_password("tennis_username", "user")
+            keyring.delete_password("tennis_password", username)
+
+            print("Credentials removed from keyring.")
+        except keyring.errors.PasswordDeleteError:
+            print("No credentials found in keyring.")
         open_login(e)
     
     def share_overlay(e,id):
         if page.width > page.height:
             margem = ft.margin.symmetric(horizontal=page.width/4, vertical=page.height/6)
             relative_width = page.width/2
-            relative_height = page.height/7
+            relative_height = page.height/8
         else:
             margem = ft.margin.symmetric(horizontal=page.width/10, vertical=page.height/6)
             relative_width = page.width/1.2
@@ -286,8 +291,6 @@ def main(page: ft.Page):
         )
         page.update()
 
-    import keyring
-
     def on_app_start(page):
         username = keyring.get_password("tennis_username", "user")
         if username:
@@ -299,11 +302,14 @@ def main(page: ft.Page):
                     page.go("/matches")
                 except (Exception, ValueError) as e:
                     print(f"Error during auto-login: {e}")
-                    page.go("/login")
+                    page.go("/")
             else:
-                page.go("/login")
+                page.go("/")
         else:
-            page.go("/login")
-    page.go(page.route)
+            page.go("/")
+
+    page.on_route_change = route_change
+    page.on_view_pop = view_pop
+    on_app_start(page)
 
 ft.app(main)

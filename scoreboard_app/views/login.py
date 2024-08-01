@@ -1,4 +1,5 @@
 import flet as ft
+import keyring
 import db.user_crud as user_crud
 import time
 from service import user_service
@@ -38,7 +39,10 @@ class Login(ft.UserControl):
             user = user_service.authenticate(username, password)
             self.page.session.clear()
             self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})            
-            #print("login bem sucedido!")
+            
+            keyring.set_password("tennis_username", "user", username)
+            keyring.set_password("tennis_password", username, password)
+        
             self.page.go("/matches")
         except (Exception,ValueError) as e:
             self.error_field.value = str(e)

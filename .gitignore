@@ -11,3 +11,5 @@ venv
 /scoreboard_app/db/__pycache__
 /scoreboard_app/model/__pycache__
 .env
+/builds
+/scoreboard_app/build
