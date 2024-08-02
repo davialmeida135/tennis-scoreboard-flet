@@ -1,9 +1,9 @@
 import flet as ft
-import keyring
 import db.user_crud as user_crud
 import time
 from service import user_service
-
+import config
+import db.user_sql as sql
 class Login(ft.UserControl):
     def __init__(self, page:ft.Page):
         super().__init__()
@@ -40,8 +40,7 @@ class Login(ft.UserControl):
             self.page.session.clear()
             self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})            
             
-            keyring.set_password("tennis_username", "user", username)
-            keyring.set_password("tennis_password", username, password)
+            sql.save_user_credentials(username,password)
         
             self.page.go("/matches")
         except (Exception,ValueError) as e:

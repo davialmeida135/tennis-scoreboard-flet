@@ -13,3 +13,4 @@ venv
 .env
 /builds
 /scoreboard_app/build
+db.db

@@ -1,4 +1,5 @@
 import flet as ft
+import config
 from views.stream_input_overlay import StreamInput
 from views.stream_url_overlay import StreamUrl
 from views.scoreboard import Scoreboard
@@ -10,8 +11,9 @@ from views.matches import Matches
 from service.match_service import *
 from views.new_match_overlay import NewMatch
 from views.scoreboard_stream import ScoreboardStream
-import config
-import keyring
+import db.user_sql as sql
+
+import os
 
 def main(page: ft.Page):
     #print("initial route:", page.route)
@@ -214,13 +216,10 @@ def main(page: ft.Page):
     def logout(e):
         page.session.clear()
         try:
-            username = keyring.get_password("tennis_username", "user")
-            keyring.delete_password("tennis_username", "user")
-            keyring.delete_password("tennis_password", username)
-
-            print("Credentials removed from keyring.")
-        except keyring.errors.PasswordDeleteError:
-            print("No credentials found in keyring.")
+            sql.delete_user_credentials()
+            print("Credentials removed from sql.")
+        except Exception as e:
+            print("No credentials found in sql.")
         open_login(e)
     
     def share_overlay(e,id):
@@ -292,21 +291,18 @@ def main(page: ft.Page):
         page.update()
 
     def on_app_start(page):
-        username = keyring.get_password("tennis_username", "user")
-        if username:
-            password = keyring.get_password("tennis_password", username)
-            if password:
-                try:
-                    user = user_service.authenticate(username, password)
-                    page.session.set("logged_user", {"username": username, "access_token": user.access_token, "refresh_token": user.refresh_token})
-                    page.go("/matches")
-                except (Exception, ValueError) as e:
-                    print(f"Error during auto-login: {e}")
-                    page.go("/")
-            else:
+        creds = sql.get_user_credentials()
+        if creds:
+            try:
+                user = user_service.authenticate(creds[0], creds[1])
+                page.session.set("logged_user", {"username": creds[0], "access_token": user.access_token, "refresh_token": user.refresh_token})
+                page.go("/matches")
+            except (Exception, ValueError) as e:
+                print(f"Error during auto-login: {e}")
                 page.go("/")
         else:
             page.go("/")
+        
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
