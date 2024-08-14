@@ -14,6 +14,7 @@ from flet import (
     TextField
     )
 import config
+from service import user_service
 from views.stream_url_overlay import StreamUrl
 
 from model.tennismatch import TennisMatch
@@ -37,7 +38,7 @@ class Scoreboard(UserControl):
         #Nome do jogador
         self.placar_1.controls.append(
             ft.Container(
-                content=ft.Text(value=self.match.player1, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                content=ft.Text(size=config.SCOREBOARD_PLAYER_SIZE,value=self.match.player1, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
                 alignment=ft.alignment.center,
                 
                 padding=5,
@@ -56,7 +57,7 @@ class Scoreboard(UserControl):
         for set in self.match.match_moment.sets:
             self.placar_1.controls.append(
                 ft.Container(
-                    content=ft.Text(value=set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    content=ft.Text(value=set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                     alignment=ft.alignment.center,
                     padding=5,
                     height=50,
@@ -73,7 +74,7 @@ class Scoreboard(UserControl):
         #Set em andamento
         self.placar_1.controls.append(
             ft.Container(
-                        content=ft.Text(value=self.match.match_moment.current_set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                        content=ft.Text(value=self.match.match_moment.current_set.player1_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                         alignment=ft.alignment.center,
                         padding=10,
                         height=50,
@@ -98,6 +99,7 @@ class Scoreboard(UserControl):
                     width=100,
                     max_lines=2,
                     text_align=ft.TextAlign.CENTER,
+                    size=config.SCOREBOARD_TEXT_SIZE,
                     ),
                 alignment=ft.alignment.center,
                 width=51.6,
@@ -117,7 +119,7 @@ class Scoreboard(UserControl):
         #Nome do jogador
         self.placar_2.controls.append(
             ft.Container(
-                content=ft.Text(value=self.match.player2, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                content=ft.Text(size=config.SCOREBOARD_PLAYER_SIZE,value=self.match.player2, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
                 alignment=ft.alignment.center,
                 
                 padding=5,
@@ -136,7 +138,7 @@ class Scoreboard(UserControl):
         for set in self.match.match_moment.sets:
             self.placar_2.controls.append(
                 ft.Container(
-                    content=ft.Text(value=set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                    content=ft.Text(value=set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                     alignment=ft.alignment.center,
                     padding=5,
                     height=50,
@@ -154,7 +156,7 @@ class Scoreboard(UserControl):
         #Set em andamento
         self.placar_2.controls.append(
             ft.Container(
-                content=ft.Text(value=self.match.match_moment.current_set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2),
+                content=ft.Text(value=self.match.match_moment.current_set.player2_score, color=colors.WHITE,weight=ft.FontWeight.BOLD,width=90,max_lines=2,size=config.SCOREBOARD_TEXT_SIZE),
                 alignment=ft.alignment.center,
                 padding=10,
                 height=50,
@@ -179,6 +181,7 @@ class Scoreboard(UserControl):
                     width=100,
                     max_lines=2,
                     text_align=ft.TextAlign.CENTER,
+                    size=config.SCOREBOARD_TEXT_SIZE,
                     ),
                 alignment=ft.alignment.center,
                 width=51.6,
@@ -462,7 +465,8 @@ class Scoreboard(UserControl):
         self.botao_2.value = self.match.match_moment.current_game.player2_score 
         self.update_placar_1()
         self.update_placar_2()
-        update_match(self.match.match_id, self.match)
+        
+        update_match(self.match)
         topic_name = "match_topic_"+str(self.match.match_id)
         self.page.pubsub.send_all_on_topic(topic_name,self.match)
         self.update()
@@ -482,11 +486,11 @@ class Scoreboard(UserControl):
         self.update_all()
 
     def undo_pressed(self, button):
-        #print("Undo")
+        ##print("Undo")
         self.match.undo()
         self.update_all()
    
     def redo_pressed(self, button):
-        #print("redo")
+        ##print("redo")
         self.match.redo()
         self.update_all()

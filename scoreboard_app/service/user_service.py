@@ -1,37 +1,44 @@
 import sqlite3
 from db import user_crud
-import bcrypt
-from db import db
+from passlib.hash import pbkdf2_sha256
 from model.user import User
+import os
+
+def save_tokens(access_token, refresh_token):
+    os.environ['TENNIS_ACCESS_TOKEN'] = access_token
+    os.environ['TENNIS_REFRESH_TOKEN'] = refresh_token
+
+def load_tokens():
+    access_token = os.environ.get('TENNIS_ACCESS_TOKEN')
+    refresh_token = os.environ.get('TENNIS_REFRESH_TOKEN')
+    return access_token, refresh_token
 
 def hash_password(password):
     """Hash a password for storing."""
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return pbkdf2_sha256.hash(password)
 
 def create_user(username, password):
-    conn = db.connect()
+    
     """Create a new user with a hashed password."""
     hashed_password = hash_password(password)
-    user_crud.create_user(conn, username, hashed_password)
+    try:
+        user_crud.create_user(username.lower(), hashed_password)
+    except Exception as e:
+        raise e
 
 def authenticate(username, password):
-    conn = db.connect()
+    
     """Authenticate a user."""
     # Retrieve the stored hashed password from the database
-    stored_hashed_password = user_crud.get_user_password(conn, username)
-    if stored_hashed_password:
-        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password):
-            id = user_crud.get_user_id(conn, username)
-            user = User(id,username)
-            return user
-        raise ValueError("Invalid password")
-    raise ValueError("Invalid username")
+    auth_response = user_crud.auth_user(username.lower(), password)
+    if auth_response:
+        user = User(username,auth_response['access_token'],auth_response['refresh_token'])
+        save_tokens(auth_response['access_token'],auth_response['refresh_token'])
+        print(auth_response['access_token'],auth_response['refresh_token'])
+        return user
+    else:
+        raise ValueError("Invalid username or password")
     
-    
-
-def get_user_id(username):
-    conn = db.connect()
-    return user_crud.get_user_id(conn, username)
 
 def validate_user(username, password, confirm_password):
     """Validate user input."""
@@ -46,12 +53,12 @@ def validate_user(username, password, confirm_password):
     return None
 
 def delete_user(username, password):
-    conn = db.connect()
+
     """Delete a user."""
     try:
         authenticate(username, password)
     
-        user_crud.delete_user(conn, username)
+        user_crud.delete_user( username)
         return True
     except ValueError as e:
         return False

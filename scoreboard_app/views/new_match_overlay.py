@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import service.match_service as match_service
 from model.tennismatch import TennisMatch
-
+from service import user_service
 
 class NewMatch(ft.Column):
     def __init__(self, page: ft.Page):
@@ -42,14 +42,15 @@ class NewMatch(ft.Column):
             
         )
         def create_match(e):
-            print("Create match clicked")
+            #print("Create match clicked")
             player1_name = self.player1_name_field.value
             player2_name = self.player2_name_field.value
             max_sets = self.max_sets_dropdown.value
             match_tiebreak = self.match_tiebreak_dropdown.value
             match = TennisMatch(player1=player1_name, player2=player2_name, match_id=None)
             match.start_match()
-            match_service.add_match(self.page.session.get("logged_user")["id"], match)
+            
+            match_service.add_match(match, )
             self.page.overlay.clear()
             self.page.go("/matches/new")
         
