@@ -1,9 +1,5 @@
 # A scoreboard-app Flet app
 
-An example of a minimal Flet app.
+Placar de tênis interativo com possibilidade de salvamento de partidas por usuário
 
-To run the app:
-
-```
-flet run [app_directory]
-```
+Depende da API desenvolvida
