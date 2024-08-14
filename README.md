@@ -18,4 +18,4 @@ Follow these instructions to get the project up and running on your local machin
 
 - Python 3.8 or higher
 - Flet framework
-- All libraries on requirements.txt (or access the .venv)
+- All libraries on requirements.txt
