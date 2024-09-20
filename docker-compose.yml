@@ -1,0 +1,9 @@
+services:
+  tennis_scoreboard:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - NAME=TennisScoreboard
+    volumes:
+      - .:/app
