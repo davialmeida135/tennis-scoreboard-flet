@@ -29,7 +29,7 @@ EXPOSE 63115
 # Define environment variable
 ENV NAME TennisScoreboard
 ENV FLET_FORCE_WEB_SERVER 1
-ENV PORT 63115
+ENV FLET_SERVER_PORT 63115
 
 # Run main.py when the container launches
 CMD ["python", "scoreboard_app/main.py"]
