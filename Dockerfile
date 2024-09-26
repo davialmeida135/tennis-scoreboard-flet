@@ -24,11 +24,12 @@ COPY . /app
 RUN pip install --no-cache-dir -r scoreboard_app/requirements.txt
 
 # Make port 80 available to the world outside this container
-EXPOSE 8000
+EXPOSE 63115
 
 # Define environment variable
 ENV NAME TennisScoreboard
 ENV FLET_FORCE_WEB_SERVER 1
+ENV PORT 63115
 
 # Run main.py when the container launches
 CMD ["python", "scoreboard_app/main.py"]

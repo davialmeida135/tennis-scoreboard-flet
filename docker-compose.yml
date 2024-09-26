@@ -2,7 +2,7 @@ services:
   tennis_scoreboard:
     build: .
     ports:
-      - "8000:8000"
+      - "63115:63115"
     environment:
       - NAME=TennisScoreboard
     volumes:
