@@ -3,7 +3,7 @@ import db.user_crud as user_crud
 import time
 from service import user_service
 import config
-import db.user_sql as sql
+import db.user_storage as user_storage
 class Login(ft.UserControl):
     def __init__(self, page:ft.Page):
         super().__init__()
@@ -40,7 +40,7 @@ class Login(ft.UserControl):
             self.page.session.clear()
             self.page.session.set("logged_user", {"username": username,"access_token": user.access_token, "refresh_token": user.refresh_token})            
             
-            sql.save_user_credentials(username,password)
+            user_storage.save_user_credentials(self.page,username,password)
         
             self.page.go("/matches")
         except (Exception,ValueError) as e:

@@ -1,19 +1,17 @@
 import flet as ft
 import config
+from model.user import User
 from views.stream_input_overlay import StreamInput
 from views.stream_url_overlay import StreamUrl
 from views.scoreboard import Scoreboard
-from model.tennismatch import TennisMatch
-from views.menu import Menu
 from views.signup import Signup
 from views.login import Login
 from views.matches import Matches
-from service.match_service import *
+import service.match_service as match_service
+from service import user_service
 from views.new_match_overlay import NewMatch
 from views.scoreboard_stream import ScoreboardStream
-import db.user_sql as sql
-
-import os
+import db.user_storage as user_storage
 
 def main(page: ft.Page):
     #print("initial route:", page.route)
@@ -32,8 +30,8 @@ def main(page: ft.Page):
                 logged_user = User(logged_user=page.session.get("logged_user"))
                 #print('player matches: '+str(get_player_matches_id(logged_user)))
                 
-                if int(match_id) in get_player_matches_id(logged_user):
-                    match = get_match(match_id)
+                if int(match_id) in match_service.get_player_matches_id(logged_user):
+                    match = match_service.get_match(match_id)
                     page.views.append(
                         ft.View(
                         route = f"/match/{match_id}",
@@ -63,7 +61,7 @@ def main(page: ft.Page):
         elif troute.match("/stream/:id"):
             page.views.clear()
             match_id = troute.id
-            match = get_match(match_id)
+            match = match_service.get_match(match_id)
             page.views.append(
                 ft.View(
                 route = f"/stream/{match_id}",
@@ -92,7 +90,7 @@ def main(page: ft.Page):
             # Check if user is logged in
             if page.session.contains_key("logged_user"):
                 logged_user = User(logged_user=page.session.get("logged_user"))
-                user_matches = get_player_matches(logged_user)   
+                user_matches = match_service.get_player_matches(logged_user)   
                 page.views.append(
                     ft.View(
                     route ="/matches",
@@ -216,10 +214,10 @@ def main(page: ft.Page):
     def logout(e):
         page.session.clear()
         try:
-            sql.delete_user_credentials()
-            print("Credentials removed from sql.")
-        except Exception as e:
-            print("No credentials found in sql.")
+            user_storage.delete_user_credentials(page)
+            print("Credentials removed from storage.")
+        except Exception:
+            print("No credentials found in storage.")
         open_login(e)
     
     def share_overlay(e,id):
@@ -232,7 +230,7 @@ def main(page: ft.Page):
             relative_width = page.width/1.2
             relative_height = page.height/7
 
-        url = "http://192.168.1.107:8551/scoreboard_app/main.py/stream/"+str(id)
+        url = "http://tennis.digi.com.br/stream/"+str(id)
 
         page.overlay.clear()
         page.overlay.append(
@@ -291,7 +289,7 @@ def main(page: ft.Page):
         page.update()
 
     def on_app_start(page):
-        creds = sql.get_user_credentials()
+        creds = user_storage.get_user_credentials(page)
         if creds:
             try:
                 user = user_service.authenticate(creds[0], creds[1])
