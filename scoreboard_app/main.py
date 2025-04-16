@@ -230,7 +230,7 @@ def main(page: ft.Page):
             relative_width = page.width/1.2
             relative_height = page.height/7
 
-        url = "http://tennis.digi.com.br/stream/"+str(id)
+        url = "https://tennis.digi.com.br/stream/"+str(id)
 
         page.overlay.clear()
         page.overlay.append(

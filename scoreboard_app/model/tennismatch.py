@@ -307,14 +307,14 @@ for i in range(20):
     p.point('Davi')
 for i in range(24):
     p.point('Gustavo')
-for i in range(16):
+for i in range(6):
     p.point('Davi')
-p.point('Gustavo')
+#p.point('Gustavo')
 
-#p.relatorio()
-##print("==========================================")
-##print(p.to_json())
-##print("==========================================")
+p.relatorio()
+print("==========================================")
+print(p.to_json())
+print("==========================================")
 
 q = TennisMatch.from_json("""
 {
